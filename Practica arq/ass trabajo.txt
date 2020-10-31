@@ -1,0 +1,42 @@
+model small 
+stack 
+data 
+	CARTEL1 DB 'Ingrese valores $'
+	VECTOR DB 20
+code
+
+mov ax,@data
+mov ds,ax
+
+xor si,si
+xor ax,ax
+xor bx,bx
+xor cx,cx
+
+mov si,01
+
+mov cx,20
+mov dx, offset cartel
+mov ah,09h                 ;pido por pantalla 20 valores
+int 21h
+leer:
+mov ah,01h
+int 21h                   ; guardo en al los numeros ingresados
+dec cx 
+cmp cx,00
+je promedio
+loop leer
+
+promedio:
+xor cx,cx
+xor dx,dx
+mov cx,20
+mov ax,bx
+div cx
+mov bx,ax
+mov dx,bx                  ; el promedio esta en dx
+  
+
+
+el amor es una imposocion social que destruye 
+la felicidad. 

@@ -1,0 +1,30 @@
+;Realice una rutina que reciba un dato en bl
+;y lo muestre por pantalla en el siguiente 
+;formato:
+;original                  procesado
+;b7b6b5b4b3b2b1b0  --->    b3b2b1b0b7b6b5b4
+;
+.model small
+.stack
+.data
+     dato db 45h
+.code
+mov ax, @data
+mov ds, ax
+xor ax, ax
+xor bx, bx
+xor dx, dx
+mov bl, dato
+mov bh, bl
+rol bl,4
+xor cx, cx
+mov ah,02
+mov cl,8
+binario:
+xor dl,dl
+rcl bl,1
+adc dl,30h
+int 21h
+loop binario
+mov ah, 4ch
+int 21h

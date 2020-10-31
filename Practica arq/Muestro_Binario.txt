@@ -1,0 +1,54 @@
+.model small
+.stack
+.data
+    cartel db "Ingrese el numero: $"
+    cartel2 db "El numero en binario es: $"
+.code
+mov ax, @data
+mov ds, ax
+xor ax, ax
+xor bx, bx
+mov dx, offset cartel; Muestro cartel para pedir numero
+mov ah, 09h
+int 21h
+call ingresar
+call nueva_linea
+mov dx, offset cartel2; Muestro cartel para mostrar binario
+mov ah, 09h
+int 21h
+call mostrar
+mov ah, 4ch
+int 21h
+
+ingresar proc ; Porcedimiento ingresar dato
+    nuevo_numero:
+    mov ah, 01h
+    int 21h
+    cmp al, 30h
+    jb nuevo_numero
+    cmp al, 39h
+    ja nuevo_numero 
+    sub al, 30h
+    mov bl, al
+    ret
+ingresar endp
+mostrar proc ; Procedimiento mostrar valor en binario 
+    xor cx, cx
+    mov cl, 8
+    mov ah, 02h
+    muestra:
+    mov dl, 30h
+    rcl bl, 1
+    adc dl, 00h
+    int 21h
+    loop muestra
+    ret
+mostrar endp
+nueva_linea proc; Procedimiento para nueva linea
+    mov ah, 02h
+    mov dl, 10 
+    int 21h
+    mov dl, 13
+    int 21h
+    ret
+nueva_linea endp

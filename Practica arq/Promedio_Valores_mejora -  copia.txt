@@ -1,0 +1,71 @@
+.model small
+.stack
+.data
+    cartel1 db "Ingrese el numero diez valores $"  
+    cartel2 db "El promedio es: $"
+.code
+mov ax, @data
+mov ds, ax
+xor ax, ax
+mov ah, 09h
+mov dx, offset cartel1
+int 21h
+call nueva_linea 
+call ingresar_valores
+call nueva_linea
+mov ah, 09h 
+mov dx, offset cartel2
+int 21h
+xor ax, ax; inicializo ax
+mov ax, bx; muevo la sumatoria a ax
+xor cx, cx; inicializo cx
+mov cl, 10; muevo 10 a cl
+div cl    ; divido ax por 10
+add al, 30h;convierto el valor a ascii
+mov dl, al ; muevo el resultado a dl para mostrarlo
+mov ah, 02h
+int 21h    ;muestro el promedio
+mov ah, 4ch;fin del programa
+int 21h 
+
+
+
+nueva_linea proc
+    mov ah, 02h
+    mov dl, 10
+    int 21h
+    mov dl, 13
+    int 21h
+    ret
+nueva_linea endp 
+
+pedir_otro proc
+    mov ah, 02h
+    mov dl, 08
+    int 21h
+    ret
+pedir_otro endp 
+
+ingresar_valores proc
+    xor bx, bx
+    xor cx, cx
+    mov cl, 10
+    ingreso:
+        mov ah, 01h
+        int 21h
+        cmp al, 39h;comparo si es mayor a 9
+        ja otro    ;si es mayor voy a otro
+        cmp al, 30h;comparo si es menor a 0
+        jb otro    ;si es menor voy a otro
+        sub al, 30h; resto 30h para 
+        add bl, al ;acumular la suma del valor real
+        call nueva_linea;genero una nueva linea
+        jmp fin    ; salto a fin
+        otro:
+        call pedir_otro;vuelvo a la posicion original al cursor
+        jmp ingreso ;cuando el valor no es numero y salto a ingreso
+        fin:     ;si es numero llego
+    loop ingreso ;y ejecuto el loop
+    ret
+ingresar_valores endp
+    

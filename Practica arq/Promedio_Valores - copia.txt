@@ -1,0 +1,40 @@
+.model small
+.stack
+.data
+    cartel db "Esto es un cartel $"
+    cartel2 db "Esto es un segundo cartel $"
+.code 
+mov ax, @data 
+mov ds, ax
+xor ax, ax
+xor dx, dx
+mov dx, offset cartel; muestro cartel
+mov ah, 09h
+int 21h
+call ingresa_valores
+xor ax, ax   ;inicializo ax
+mov al, dl   ;muevo la sumatoria de valores
+mov cl, 10   ;inicializo en 10
+div cl       ;divido ax por 10. En AH el resto y el resultado en AL
+add al, 30h  ;transformo a ASCII el resultado
+mov dl, al   ;lo paso a dl para mostrarlo
+mov ah, 02h
+int 21h
+mov ah, 4ch
+int 21h
+
+ingresa_valores proc ;procedimiento 
+xor cx, cx
+mov cl, 10
+otra_tecla:
+mov ah,01h
+int 21h
+cmp al, 30h
+jb otra_tecla
+cmp al, 39h
+ja otra_tecla
+sub al, 30h
+add dl, al
+loop otra_tecla
+ret
+ingresa_valores endp  
